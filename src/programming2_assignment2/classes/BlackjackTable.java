@@ -433,4 +433,9 @@ public class BlackjackTable implements Serializable{
         in.defaultReadObject();
     }
     
+    public static void main(String[] args){
+        BlackjackTable table = new BlackjackTable();
+        table.chooseGame();
+    }
+    
 }
