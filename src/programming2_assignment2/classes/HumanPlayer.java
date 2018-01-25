@@ -21,7 +21,7 @@ public HumanPlayer(){
         System.out.printf("Your name will be %s.\n", name);
         System.out.println("Accept?\n[Yes=Y, No=N]");
         String accept = readLine();
-        if (accept.contains("Y") || accept.contains("y")){
+        if (accept.charAt(0) == 'Y' || accept.charAt(0) == 'y'){
             accepted = true;
         }
     }
@@ -42,7 +42,7 @@ public int makeBet(){
     while (bet < 0){
         String input = readLine();
         try{
-            if (input.contains("q") || input.contains("Q")) return 10;
+            if (input.charAt(0) == 'Q' || input.charAt(0) == 'q') return 0;
             bet = Integer.parseInt(input);
         }catch(NumberFormatException e){
             System.out.println("Couldn't read bet. Please enter a positive number or Q to quit.");
@@ -61,13 +61,14 @@ public boolean hit(){
         
         System.out.println("Do you wish to hit?\n[Yes=Y, No=N]");
         hit = readLine();
-        if (hit.contains("Y") || hit.contains("y")){
+        if (hit.charAt(0) == 'Y' || hit.charAt(0) == 'y'){
             output = true;
-        }else if (hit.contains("N") || hit.contains("n")){
+        }else if (hit.charAt(0) == 'N' || hit.charAt(0) == 'n'){
             output = false;
         }
         else{
-            //force while loop to reiterate
+            //force while loop to reiterate given any other input
+            System.out.println("Sorry, your input was not recognised.");
             hit="";
         }
     }
