@@ -84,36 +84,41 @@ public class BlackjackTable implements Serializable{
     
     
     public void chooseGame(){
-        String input = "";
+
+        //Failsafe, default value will cause safe quit instead of crash
+        String input = "q";
         
-        if (this.gameType == null || GameType.NONE.equals(this.gameType)){
+        //if called after a benchmark, or it's a new game.
+        if (this.gameType==GameType.PERFORMANCE || this.gameType == null || GameType.NONE.equals(this.gameType)){
             System.out.println("Please select a game type.\n[Quit=Q, Load Game=L, Advanced Game=A, Intermediate Game=I, Basic Game=B, Interactive Game=H, Performance Benchmark=P]");
             input = readLine();
         }else{
             System.out.println("Starting game...\n");
         }
         
-        if (input.contains("Q") || input.contains("q")) return;
-        
-        if (GameType.ADVANCED.equals(this.gameType) || (input.contains("A") || input.contains("a"))){
+        if (input.charAt(0)=='Q'  || input.charAt(0)=='q' ) return;
+
+        if (GameType.ADVANCED==this.gameType || (input.charAt(0)=='A'  || input.charAt(0)=='a' )){
             this.gameType = GameType.ADVANCED;
             advancedGame();
         }
-        else if (GameType.INTERMEDIATE.equals(this.gameType) || (input.contains("I") || input.contains("i"))){
+        else if (GameType.INTERMEDIATE==this.gameType || (input.charAt(0)=='I'  || input.charAt(0)=='i' )){
             this.gameType = GameType.INTERMEDIATE;
             intermediateGame();
         }
-        else if (GameType.BASIC.equals(this.gameType) || (input.contains("B") || input.contains("b"))){
+        else if (GameType.BASIC==this.gameType || (input.charAt(0)=='B'  || input.charAt(0)=='b' )){
             this.gameType = GameType.BASIC;
             basicGame();
         }
-        else if (GameType.INTERACTIVE.equals(this.gameType) || (input.contains("H") || input.contains("h"))){
+        else if (GameType.INTERACTIVE==this.gameType || (input.charAt(0)=='H'  || input.charAt(0)=='h' )){
             this.gameType = GameType.INTERACTIVE;
             humanGame();
-        }else if (GameType.PERFORMANCE.equals(this.gameType) || (input.contains("P") || input.contains("p"))){
+        }else if (GameType.PERFORMANCE==this.gameType || (input.charAt(0)=='P'  || input.charAt(0)=='p' )){
             this.gameType = GameType.PERFORMANCE;
             performanceBenchmark();
-        }else if ((input.contains("L") || input.contains("l"))){
+            //After benchamark completes, allow player to choose another option.
+            chooseGame();
+        }else if ((input.charAt(0)=='L'  || input.charAt(0)=='l' )){
             if (!handleLoad()){
                 chooseGame();
             }
@@ -244,14 +249,14 @@ public class BlackjackTable implements Serializable{
             String input = readLine();
             if (input != null){
                 
-                if (input.contains("Q") || input.contains("q") || input.contains("n") || input.contains("N")){
+                if (input.charAt(0)=='Q' || input.charAt(0)=='q' || input.charAt(0)=='n' || input.charAt(0)=='N'){
                     endGame = true;
-                }else if (input.contains("L") || input.contains("l")){
+                }else if (input.charAt(0)=='L' || input.charAt(0)=='l'){
                     
                     endGame = handleLoad();
                     autosave = !endGame;
                     
-                }else if (input.contains("S") || input.contains("s")){
+                }else if (input.charAt(0)=='S' || input.charAt(0)=='s'){
                     
                     handleSave();
                     
@@ -323,7 +328,7 @@ public class BlackjackTable implements Serializable{
         System.out.println("No players at table.\nInvite new players to table?\n[Add new players=Y, Do not add new players=N]");
 
         String input = readLine();
-        if (input != null && (input.contains("Y") || input.contains("y"))){
+        if (input != null && (input.charAt(0)=='Y' || input.charAt(0)=='y')){
             chooseGame();
         }
     }
@@ -409,11 +414,11 @@ public class BlackjackTable implements Serializable{
     }
     
     private void printWelcomeMessage(){
-        System.out.println("Welcome to our new players:\n\n");
+        System.out.println("Welcome to our new players:\n");
         for (Player player : players){
             System.out.println(player.getName());
         }
-        
+        System.out.println("\n");
     }
     
     //Serializable code
