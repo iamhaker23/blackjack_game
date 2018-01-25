@@ -1,0 +1,5 @@
+*.zip
+*.txt
+*.ser
+build/*
+dist/*
