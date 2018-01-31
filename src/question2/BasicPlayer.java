@@ -1,12 +1,12 @@
-package programming2_assignment2.classes;
+package question2;
 
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
-import static programming2_assignment2.classes.BlackjackDealer.determineBlackjack;
-import programming2_assignment2.classes.Card.Rank;
-import static programming2_assignment2.classes.CardGameUtils.randomName;
-import programming2_assignment2.interfaces.Player;
+import static question2.BlackjackDealer.determineBlackjack;
+import question2.Card.Rank;
+import static question1.CardGameUtils.randomName;
+import interfaces.Player;
 
 /**
  *

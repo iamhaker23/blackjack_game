@@ -1,16 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package programming2_assignment2.classes;
+package question1;
 
 import java.io.IOException;
-import java.io.ObjectStreamException;
 import java.io.Serializable;
 import java.util.Comparator;
 import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
+import static question1.CardGameUtils.*;
 
 /**
  *
@@ -39,6 +34,20 @@ public class Card implements Serializable, Comparable<Card>{
     
     public Rank getRank(){
         return this.rank;
+    }
+    
+    //added for testing reverse hand in Hand.java, which creates copies of cards in a hand 
+    //in which case the default "compare by ref" is not sufficient to determine equality
+    //note: it's the only use case of deep-equals functionality
+    @Override
+    public boolean equals(Object c){
+        if (c == null) return false;
+        try{
+            Card tmp = (Card)c;
+            return ((tmp.getRank().equals(this.rank)) && (tmp.getSuit().equals(this.suit)));
+        }catch(Exception e){
+            return false;
+        }
     }
     
     @Override
@@ -279,6 +288,57 @@ public class Card implements Serializable, Comparable<Card>{
         }
     }
     
-    
+    public static void main(String[] args){
+        
+        assertEquals(Rank.QUEEN, Rank.ACE.getPrevious(), "Testing Rank.getPrevious():\nBefore ACE is QUEEN:\n\t");
+        assertEquals(Rank.ACE, Rank.TWO.getPrevious(), "Before TWO is ACE:\n\t");
+        assertEquals(Rank.TWO, Rank.THREE.getPrevious(), "Before THREE is TWO:\n\t");
+        assertEquals(Rank.THREE, Rank.FOUR.getPrevious(), "Before FOUR is THREE:\n\t");
+        assertEquals(Rank.FOUR, Rank.FIVE.getPrevious(), "Before FIVE is FOUR:\n\t");
+        assertEquals(Rank.FIVE, Rank.SIX.getPrevious(), "Before SIX is FIVE:\n\t");
+        assertEquals(Rank.SIX, Rank.SEVEN.getPrevious(), "Before SEVEN is SIX:\n\t");
+        assertEquals(Rank.SEVEN, Rank.EIGHT.getPrevious(), "Before EIGHT is SEVEN:\n\t");
+        assertEquals(Rank.EIGHT, Rank.NINE.getPrevious(), "Before NINE is EIGHT:\n\t");
+        assertEquals(Rank.NINE, Rank.TEN.getPrevious(), "Before TEN is NINE:\n\t");
+        assertEquals(Rank.TEN, Rank.JACK.getPrevious(), "Before JACK is TEN:\n\t");
+        assertEquals(Rank.JACK, Rank.KING.getPrevious(), "Before KING is JACK:\n\t");
+        assertEquals(Rank.KING, Rank.QUEEN.getPrevious(), "Before QUEEN is KING:\n\t");
+
+        assertEquals(1, Rank.ACE.getAltValue(), "\nTesting Rank.getValue() and Rank.getAltValue():\nACE alt value is 1:\n\t");
+        assertEquals(11, Rank.ACE.getValue(), "ACE value is 1\n\t");
+        assertEquals(2, Rank.TWO.getValue(), "TWO value is 2\n\t");
+        assertEquals(3, Rank.THREE.getValue(), "THREE value is 3\n\t");
+        assertEquals(4, Rank.FOUR.getValue(), "FOUR value is 4\n\t");
+        assertEquals(5, Rank.FIVE.getValue(), "FIVE value is 5\n\t");
+        assertEquals(6, Rank.SIX.getValue(), "SIX value is 6\n\t");
+        assertEquals(7, Rank.SEVEN.getValue(), "SEVEN value is 7\n\t");
+        assertEquals(8, Rank.EIGHT.getValue(), "EIGHT value is 8\n\t");
+        assertEquals(9, Rank.NINE.getValue(), "NINE value is 9\n\t");
+        assertEquals(10, Rank.TEN.getValue(), "TEN value is 10\n\t");
+        assertEquals(10, Rank.JACK.getValue(), "JACK value is 10\n\t");
+        assertEquals(10, Rank.KING.getValue(), "KING value is 10\n\t");
+        assertEquals(10, Rank.QUEEN.getValue(), "QUEEN value is 10\n\t");
+		
+        assertEquals(-1, Rank.TWO.getAltValue(), "TWO alt value is nothing so defaults to -1\n\t");
+        assertEquals(-1, Rank.THREE.getAltValue(), "THREE alt value is nothing so defaults to -1\n\t");
+        assertEquals(-1, Rank.FOUR.getAltValue(), "FOUR alt value is nothing so defaults to -1\n\t");
+        assertEquals(-1, Rank.FIVE.getAltValue(), "FIVE alt value is nothing so defaults to -1\n\t");
+        assertEquals(-1, Rank.SIX.getAltValue(), "SIX alt value is nothing so defaults to -1\n\t");
+        assertEquals(-1, Rank.SEVEN.getAltValue(), "SEVEN alt value is nothing so defaults to -1\n\t");
+        assertEquals(-1, Rank.EIGHT.getAltValue(), "EIGHT alt value is nothing so defaults to -1\n\t");
+        assertEquals(-1, Rank.NINE.getAltValue(), "NINE alt value is nothing so defaults to -1\n\t");
+        assertEquals(-1, Rank.TEN.getAltValue(), "TEN alt value is nothing so defaults to -1\n\t");
+        assertEquals(-1, Rank.JACK.getAltValue(), "JACK alt value is nothing so defaults to -1\n\t");
+        assertEquals(-1, Rank.KING.getAltValue(), "KING alt value is nothing so defaults to -1\n\t");
+        assertEquals(-1, Rank.QUEEN.getAltValue(), "QUEEN alt value is nothing so defaults to -1\n\t");
+
+        assertEquals(18, Card.sum(new Card(Rank.EIGHT, Suit.CLUBS), new Card(Rank.QUEEN, Suit.DIAMONDS)), "Testing Card.sum():\nEIGHT and QUEEN:\n\t");
+
+        assertTrue(Card.isBlackjack(new Card(Rank.ACE, Suit.CLUBS), new Card(Rank.QUEEN, Suit.CLUBS)), "Testing Card.isBlackjack():\nTesting ACE and QUEEN:\n\t");
+        assertTrue(Card.isBlackjack(new Card(Rank.ACE, Suit.CLUBS), new Card(Rank.TEN, Suit.CLUBS)), "Testing ACE and TEN:\n\t");
+        assertTrue(Card.isBlackjack(new Card(Rank.ACE, Suit.CLUBS), new Card(Rank.KING, Suit.CLUBS)), "Testing ACE and KING:\n\t");
+        assertTrue(Card.isBlackjack(new Card(Rank.ACE, Suit.CLUBS), new Card(Rank.JACK, Suit.CLUBS)), "Testing ACE and JACK:\n\t");
+        assertFalse(Card.isBlackjack(new Card(Rank.ACE, Suit.CLUBS), new Card(Rank.NINE, Suit.CLUBS)), "Testing ACE and NINE:\n\t");
+    }
     
 }

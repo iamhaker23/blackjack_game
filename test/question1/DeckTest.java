@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+package question1;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,10 +15,10 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import programming2_assignment2.classes.Card;
-import programming2_assignment2.classes.Deck;
-import static programming2_assignment2.classes.FileUtils.readDeckFromFile;
-import static programming2_assignment2.classes.FileUtils.writeDeckToFile;
+import question1.Card;
+import question1.Deck;
+import static question1.FileUtils.readDeckFromFile;
+import static question1.FileUtils.writeDeckToFile;
 
 /**
  *

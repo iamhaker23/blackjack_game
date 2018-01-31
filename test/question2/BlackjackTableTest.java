@@ -1,17 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+package question2;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -19,12 +8,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import programming2_assignment2.classes.BlackjackDealer;
-import programming2_assignment2.classes.BlackjackTable;
-import programming2_assignment2.classes.Card;
-import programming2_assignment2.classes.Deck;
-import static programming2_assignment2.classes.FileUtils.readBlackjackTableFromFile;
-import static programming2_assignment2.classes.FileUtils.writeBlackjackTableToFile;
+import static question2.FileUtils.readBlackjackTableFromFile;
+import static question2.FileUtils.writeBlackjackTableToFile;
 
 /**
  *

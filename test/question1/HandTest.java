@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+package question1;
 
 import java.util.List;
 import org.junit.After;
@@ -11,11 +7,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import programming2_assignment2.classes.Card;
-import programming2_assignment2.classes.Card.Rank;
-import programming2_assignment2.classes.Card.Suit;
-import programming2_assignment2.classes.Deck;
-import programming2_assignment2.classes.Hand;
+import question1.Card.Rank;
+import question1.Card.Suit;
 
 /**
  *

@@ -1,12 +1,12 @@
-package programming2_assignment2.classes;
+package question2;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import programming2_assignment2.interfaces.Dealer;
-import programming2_assignment2.interfaces.Player;
+import interfaces.Dealer;
+import interfaces.Player;
 
 /**
  *
@@ -213,7 +213,7 @@ public class BlackjackDealer implements Dealer, Serializable{
             score = scoreHand(hand);
         }
         
-        if (dealerScore <= 21){
+        if (score <= 21){
             if (printOut) System.out.println("Dealer: STICK["+score+"]\n");
         }else{
             if (printOut) System.out.println("Dealer: BUST("+score+")\n");
@@ -274,8 +274,11 @@ public class BlackjackDealer implements Dealer, Serializable{
                 //both stick
                 if (b.score > dealerScore){
                     winsBet(b.bet,b.player);
-                }else if (b.score <= dealerScore){
+                }else if (b.score < dealerScore){
                     losesBet(b.bet, b.player);
+                }else{
+                    //draw
+                    keepStake(b.bet, b.player);
                 }
             }
         }
@@ -288,6 +291,13 @@ public class BlackjackDealer implements Dealer, Serializable{
         if (printOut) System.out.println(p.getName()  + ": BALANCE{"+p.getBalance()+"}\n");
         dealerWinnings -= amount;
     }
+    
+    private void keepStake(int amount, Player p){
+        p.settleBet(0);
+        if (printOut) System.out.println(p.getName()  + ": KEEPS STAKE {"+amount+"}");
+        if (printOut) System.out.println(p.getName()  + ": BALANCE{"+p.getBalance()+"}\n");
+    }
+    
     private void losesBet(int amount, Player p){
         if(!p.settleBet(-1*amount)){
             if (printOut) System.out.println(p.getName()  + ": BROKE, LEAVES.");

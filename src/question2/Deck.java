@@ -1,8 +1,7 @@
-package programming2_assignment2.classes;
+package question2;
 
-import java.io.FileOutputStream;
+import java.io.File;
 import java.io.IOException;
-import java.io.ObjectStreamException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -10,9 +9,11 @@ import java.util.List;
 import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
 import java.util.Collections;
-import programming2_assignment2.classes.Card.Rank;
-import programming2_assignment2.classes.Card.Suit;
-
+import question2.Card.Rank;
+import question2.Card.Suit;
+import static question2.CardGameUtils.*;
+import static question2.FileUtils.readDeckFromFile;
+import static question2.FileUtils.writeDeckToFile;
 /**
  *
  * @author Hakeem
@@ -137,18 +138,18 @@ public class Deck implements Iterable<Card>, Serializable{
     private void writeObject(ObjectOutputStream out) throws IOException{
         
         if (this.saveAll){
-            System.out.println("Writing every card in deck.\n*************\n");
+            System.out.println("Saving [Actual game, so writing every card in deck.]\n");
             
             out.putFields().put("deck", this.deck);
         }else{
-            System.out.println("Writing every other card in deck.\n************\n");
+            System.out.println("Saving [Writing every other card in deck.]\n");
             
             List<Card> onlySecondCards = new ArrayList();
 
             Iterator<Card> iter = secondCardIterator();
             while (iter.hasNext()){
                 Card current = iter.next();
-                System.out.println("writing "+current.toString()+"\n");
+                System.out.println("writing "+current.toString());
                 onlySecondCards.add(current);
             }
 
@@ -195,6 +196,111 @@ public class Deck implements Iterable<Card>, Serializable{
         
         Collections.sort(deck);
         
+    }
+    
+    public static void main(String[] args){
+        Deck test;
+    
+        test = new Deck();
+    
+        assertEquals(52, test.size(), "Testing Deck() and Deck.deal():\nInitial deck size is 52:\n\t");
+        test.deal();
+        assertEquals(51, test.size(), "Testing deck size is 51 after deal():\n\t");
+        test.deal();
+        assertEquals(50, test.size(), "Testing deck size is 50 after deal():\n\t");
+        test.deal();
+        assertEquals(49, test.size(), "Testing deck size is 49 after deal():\n\t");
+        
+    
+    
+        test = new Deck();
+    
+        
+        List<Card> beforeShuffleDeck = test.copyOfDeck();
+        String beforeShuffle = test.toString();
+        test.shuffle();
+        String afterShuffle = test.toString();
+        
+        
+        assertEquals(afterShuffle.length(), beforeShuffle.length(), "Testing shuffle(), after shuffle toString() contains same number of characters:\n\t");
+        assertNotEquals(afterShuffle, beforeShuffle, "Testing shuffle(), after shuffle toString() values should be different.\n\t");
+    
+        int cardsInDifferentPlace = 0;
+        System.out.println("\nTesting all cards are present before and after shuffle():\n");
+        
+        for (Card card : test){
+            //Current card must exist in deck, and might be moved
+            assertTrue(beforeShuffleDeck.contains(card), "Testing deck contains "+card.toString()+"\n\t");
+            cardsInDifferentPlace += (beforeShuffleDeck.get(test.indexOfCard(card)).equals(card)) ? 0 : 1;
+        }
+        assertNotEquals(0, cardsInDifferentPlace, "Testing that more than 0 cards have moved place after shuffle\n\t");
+    
+	
+        test = new Deck();
+        
+        File testFile = new File("test-deck.ser");
+        
+        System.out.println("Start READ/WRITE\n*************\n");
+        writeDeckToFile(testFile, test);
+        
+        Deck test2 = readDeckFromFile(testFile);
+        
+        System.out.println("*************\nEnd READ/WRITE\n");
+        
+        //Assignment brief specifies writing and reading only "every second card" so size is halved.
+        assertEquals(test.size()/2, test2.size(), "Testing write only stored every other card:\n\t");
+        
+        Iterator<Card> everyOther = test.secondCardIterator();
+        while (everyOther.hasNext()){
+            assertEquals(everyOther.next().toString(), test2.deal().toString(), "Testing reconstructed deck contains 'every other' card:\n\t");
+        }
+        
+        test = new Deck();
+        
+        
+        List<Card> testDeck = new ArrayList();
+        testDeck.add(new Card(Card.Rank.SIX, Card.Suit.HEARTS));
+        testDeck.add(new Card(Card.Rank.TEN, Card.Suit.DIAMONDS));
+        testDeck.add(new Card(Card.Rank.TEN, Card.Suit.SPADES));
+        testDeck.add(new Card(Card.Rank.TWO, Card.Suit.CLUBS));
+        
+        test.setDeck(testDeck);
+        
+        test.sortAscending();
+        
+        System.out.println(test.toString());
+        assertEquals("two of clubs, six of hearts, ten of diamonds, ten of spades", test.toString(), "Testing Deck.sortAscending():\n\t");
+
+        test.sortDescending();
+        
+        System.out.println(test.toString());
+        assertEquals("ten of diamonds, ten of spades, six of hearts, two of clubs", test.toString(), "Testing Deck.sortDescending():\n\t");
+        
+
+        test.newDeck();
+        
+        //TODO: bugfix - sort produces different results depending on the initial order of the deck
+        
+        System.out.println("\n****************\nNO MORE TESTS TO PERFORM, OUTPUT DECK SORTING SCENARIOS:");
+        
+        test.sortAscending();
+        System.out.println("Asc[new deck]");
+        System.out.println(test.toString());
+
+        test.sortDescending();
+        System.out.println("Desc[new deck]");
+        System.out.println(test.toString());
+        
+        
+        test.shuffle();
+        
+        test.sortAscending();
+        System.out.println("Asc[after shuffle()]");
+        System.out.println(test.toString());
+
+        test.sortDescending();
+        System.out.println("Desc[after shuffle()]");
+        System.out.println(test.toString());
     }
     
 }

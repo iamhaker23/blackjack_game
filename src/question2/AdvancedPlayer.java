@@ -1,7 +1,7 @@
-package programming2_assignment2.classes;
+package question2;
 
 import java.util.List;
-import programming2_assignment2.classes.Card.Rank;
+import question2.Card.Rank;
 
 /**
  *

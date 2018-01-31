@@ -1,4 +1,4 @@
-package programming2_assignment2.interfaces;
+package interfaces;
 
 
 /*
@@ -10,7 +10,7 @@ coursework
  */
 
 import java.util.*;
-import programming2_assignment2.classes.Hand;
+import question2.Hand;
 
 public interface Dealer {
 

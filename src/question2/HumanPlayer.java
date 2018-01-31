@@ -1,11 +1,11 @@
-package programming2_assignment2.classes;
+package question2;
 
 /**
  *
  * @author Hakeem
  */
 
-import static programming2_assignment2.classes.CardGameUtils.readLine;
+import static question1.CardGameUtils.readLine;
 
 public class HumanPlayer extends BasicPlayer{
 

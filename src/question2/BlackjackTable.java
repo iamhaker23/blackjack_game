@@ -1,26 +1,21 @@
-package programming2_assignment2.classes;
+package question2;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
+import question1.FileUtils;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import static programming2_assignment2.classes.FileUtils.readBlackjackTableFromFile;
-import programming2_assignment2.interfaces.Dealer;
-import programming2_assignment2.interfaces.Player;
-import static programming2_assignment2.classes.CardGameUtils.readLine;
+import static question2.FileUtils.readBlackjackTableFromFile;
+import static question2.FileUtils.writeBlackjackTableToFile;
+import interfaces.Dealer;
+import interfaces.Player;
+import static question2.CardGameUtils.readLine;
 
 /**
  *
@@ -45,7 +40,12 @@ public class BlackjackTable implements Serializable{
     private GameType gameType;
     
     private enum GameType{
-        INTERMEDIATE, ADVANCED, BASIC, NONE, INTERACTIVE, PERFORMANCE
+        INTERMEDIATE,
+        ADVANCED,
+        BASIC,
+        NONE,
+        INTERACTIVE,
+        PERFORMANCE
     }
     
     public List<Player> getPlayers(){
@@ -89,15 +89,13 @@ public class BlackjackTable implements Serializable{
         String input = "q";
         
         //if called after a benchmark, or it's a new game.
-        if (this.gameType==GameType.PERFORMANCE || this.gameType == null || GameType.NONE.equals(this.gameType)){
+        if (this.gameType == null || GameType.NONE.equals(this.gameType)){
             System.out.println("Please select a game type.\n[Quit=Q, Load Game=L, Advanced Game=A, Intermediate Game=I, Basic Game=B, Interactive Game=H, Performance Benchmark=P]");
             input = readLine();
         }else{
             System.out.println("Starting game...\n");
         }
         
-        if (input.charAt(0)=='Q'  || input.charAt(0)=='q' ) return;
-
         if (GameType.ADVANCED==this.gameType || (input.charAt(0)=='A'  || input.charAt(0)=='a' )){
             this.gameType = GameType.ADVANCED;
             advancedGame();
@@ -122,7 +120,14 @@ public class BlackjackTable implements Serializable{
             if (!handleLoad()){
                 chooseGame();
             }
+        }else{
+            chooseGame();
         }
+        
+        
+        if (input.charAt(0)=='Q'  || input.charAt(0)=='q' ) return;
+
+        
     }
     
     public void basicGame(){
@@ -146,11 +151,12 @@ public class BlackjackTable implements Serializable{
     
     public void humanGame(){
         
+        
+        
         printOut = true;
         if (players.isEmpty()) initialiseHumanGame();
         
         gameLoop();
-        
     }
     
     public void advancedGame(){
@@ -168,6 +174,16 @@ public class BlackjackTable implements Serializable{
         if (players.isEmpty()) initialiseAdvancedGame();
         
         benchMarkGameLoop();
+        
+        resetGame();
+        
+    }
+    
+    
+    public void resetGame(){
+        this.gameType = GameType.NONE;
+        players.clear();
+        dealer = new BlackjackDealer();
     }
     
     public void initialiseBasicGame(){
@@ -222,7 +238,7 @@ public class BlackjackTable implements Serializable{
     
     public void initialiseHumanGame(){
         
-        players.clear();
+        
         players.add(new HumanPlayer());
         players.add(new BasicPlayer());
         
@@ -241,27 +257,30 @@ public class BlackjackTable implements Serializable{
         while (!endGame){
             
             if (dealer.beatAllPlayers()){
-               noPlayersLeft();
+               endGame = noPlayersLeft();
+               autosave = !endGame;
             }
-            
-            System.out.println("Continue game?\n[Continue=<Enter number of hands to play>, Save game=S, Load game=L, Quit=Q]");
-            
-            String input = readLine();
-            if (input != null){
-                
-                if (input.charAt(0)=='Q' || input.charAt(0)=='q' || input.charAt(0)=='n' || input.charAt(0)=='N'){
-                    endGame = true;
-                }else if (input.charAt(0)=='L' || input.charAt(0)=='l'){
-                    
-                    endGame = handleLoad();
-                    autosave = !endGame;
-                    
-                }else if (input.charAt(0)=='S' || input.charAt(0)=='s'){
-                    
-                    handleSave();
-                    
-                }else{
-                    playHands(input);
+            //if game was killed by noPlayersLeft(), just continue out without saving.
+            if (!endGame){
+                System.out.println("Continue game?\n[Continue=<Enter number of hands to play>, Save game=S, Load game=L, Quit=Q]");
+
+                String input = readLine();
+                if (input != null){
+
+                    if (input.charAt(0)=='Q' || input.charAt(0)=='q' || input.charAt(0)=='n' || input.charAt(0)=='N'){
+                        endGame = true;
+                    }else if (input.charAt(0)=='L' || input.charAt(0)=='l'){
+
+                        endGame = handleLoad();
+                        autosave = !endGame;
+
+                    }else if (input.charAt(0)=='S' || input.charAt(0)=='s'){
+
+                        handleSave();
+
+                    }else{
+                        playHands(input);
+                    }
                 }
             }
         }
@@ -276,20 +295,26 @@ public class BlackjackTable implements Serializable{
         int games = 0;
         String logFileName = "stats_" + (new SimpleDateFormat("yyyy-MM-dd_HHmm")).format(new Date()) + ".txt";
         
-        logBenchmark("Game_Type, Profit_Per_Deck, Dealer_Winnings, Decks_Used\n", logFileName);
+        int handsPlayed = 0;
+        int defeatCount = 0;
+        
+        //Column names matching output as logged in printDeckStats
+        logBenchmark("Game_Type, Profit_Per_Deck, Dealer_Winnings, Decks_Used, Hands_Played, Times_Defeated_All, Players_Defeated, Players_Per_Game\n", logFileName);
+        
         int decksUsed = 0;
         
         while (games++ < 1000){
             
             if (dealer.beatAllPlayers()){
+                defeatCount++;
                 initialiseAdvancedGame();
             }
             
-            decksUsed = printDeckStats(decksUsed, logFileName);
-            playHands(1000);
+            decksUsed = printDeckStats(decksUsed, handsPlayed, defeatCount, logFileName);
+            handsPlayed += playHands(1000);
             
             if (games == 1000){
-                System.out.printf("Total dealer winnings: %d, Decks played: %d, Mean winnings per deck: %f\n", dealer.getDealerWinnings(), dealer.getDecksUsed(), (float)dealer.getDealerWinnings()/(float)dealer.getDecksUsed());
+                System.out.printf("Total dealer winnings: %d, Decks played: %d, Mean winnings per deck: %f, Players per game: 4, Hands played: %d, Players beaten: %d\n", dealer.getDealerWinnings(), dealer.getDecksUsed(), (float)dealer.getDealerWinnings()/(float)dealer.getDecksUsed(), handsPlayed, defeatCount*4);
             }
         }
         System.out.println("Benchmark stats saved in "+logFileName);
@@ -310,13 +335,13 @@ public class BlackjackTable implements Serializable{
             
     }
     
-    private int printDeckStats(int previousDecksUsed, String logFileName){
+    private int printDeckStats(int previousDecksUsed, int handsPlayed, int defeatCount, String logFileName){
         int newDecksUsed = previousDecksUsed;
         
         if (dealer.getDecksUsed() > previousDecksUsed){
            newDecksUsed = dealer.getDecksUsed();
 
-           String stats = String.format("ADVANCED_GAME, %f, %d, %d\n", (float)dealer.getDealerWinnings()/(float)previousDecksUsed, dealer.getDealerWinnings(), previousDecksUsed);
+           String stats = String.format("ADVANCED_GAME, %f, %d, %d, %d, %d, %d, %d\n", (float)dealer.getDealerWinnings()/(float)previousDecksUsed, dealer.getDealerWinnings(), previousDecksUsed, handsPlayed, defeatCount, defeatCount*4, 4);
 
            logBenchmark(stats, logFileName);
 
@@ -324,28 +349,51 @@ public class BlackjackTable implements Serializable{
         return newDecksUsed;
     }
     
-    private void noPlayersLeft(){
-        System.out.println("No players at table.\nInvite new players to table?\n[Add new players=Y, Do not add new players=N]");
+    private boolean noPlayersLeft(){
+        System.out.println("No players at table.\nInvite new players to table and continue this game?\n[Add new players=Y, New Game=N]");
 
         String input = readLine();
         if (input != null && (input.charAt(0)=='Y' || input.charAt(0)=='y')){
+            //will reinit same game type
+            if (gameType == GameType.ADVANCED){
+                initialiseAdvancedGame();
+            }else if (gameType == GameType.INTERACTIVE){
+                initialiseHumanGame();
+            }else if (gameType == GameType.INTERMEDIATE){
+                initialiseIntermediateGame();
+            }else if (gameType == GameType.BASIC){
+                initialiseBasicGame();
+            }else{
+                System.out.println("Oops. Cannot invite table to this type of game.\n");
+                resetGame();
+                chooseGame();
+            }
+        }else if (input != null && (input.charAt(0)=='N' || input.charAt(0)=='n')){
+            //will reset game and ask user to choose
+            resetGame();
             chooseGame();
+            //when passed back to gameloop, this will kill the game which started the new game.
+            return true;
         }
+        return false;
     }
     
     private void playHands(String input){
         playHands(getNumberOfHandsToPlay(input));
     }
     
-    private void playHands(int hands){
+    private int playHands(int hands){
+        int handsPlayed = 0;
+        
         if( hands > 0 ){
             int initHands = hands;
             while(hands-- > 0){
                 if (dealer.beatAllPlayers()){
                     //Otherwise the loop continues with no players (i.e. the dealer deals to themselves for the remaining games).
+                    handsPlayed = initHands-hands;
                     if(printOut){
-                        System.out.println("The house always wins. This time after only "+(initHands-hands)+".");
-                        System.out.println((hands)+" out of "+(initHands)+" requested games were not played.\n");
+                        System.out.println("The house always wins. This time after only "+(handsPlayed)+".");
+                        System.out.println((hands == 0)? "All requested games were played.\n" : (hands)+" out of "+(initHands)+" requested games were not played.\n");
                     } 
                     hands = -1;
                 }else{
@@ -353,6 +401,7 @@ public class BlackjackTable implements Serializable{
                 }
             }
         }
+        return handsPlayed;
     }
     
     private int getNumberOfHandsToPlay(String input){
@@ -406,7 +455,7 @@ public class BlackjackTable implements Serializable{
     }
     
     private static boolean save(String filename, BlackjackTable table){
-        return FileUtils.writeBlackjackTableToFile(new File(filename), table);
+        return writeBlackjackTableToFile(new File(filename), table);
     }
     
     private static BlackjackTable load(String filename){

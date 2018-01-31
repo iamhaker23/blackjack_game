@@ -1,4 +1,4 @@
-package programming2_assignment2.classes;
+package question1;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -48,41 +48,7 @@ public class FileUtils {
         return null;
     }
     
-    public static boolean writeBlackjackTableToFile(File file, BlackjackTable toWrite){
-        try{
-            FileOutputStream fos = new FileOutputStream(file);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            
-            oos.writeObject(toWrite);
-
-            fos.flush();
-            oos.close();
-            fos.close();
-            return true;
-        }catch(IOException e){
-            System.out.println("Failed to serialize BlackjackTable to file.\n"+e.getMessage());
-        }
-        return false;
-    }
-        
-    public static BlackjackTable readBlackjackTableFromFile(File file){
-        try{
-            FileInputStream fis = new FileInputStream(file);
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            
-            BlackjackTable output  = (BlackjackTable)ois.readObject();
-            
-            ois.close();
-            fis.close();
-            return output;
-        }catch(IOException e){
-            System.out.println("Failed to reconstruct BlackjackTable from file.\n"+e.getMessage());
-        }catch (ClassNotFoundException e){
-            System.out.println("Could not reconstruct BlackjackTable due to missing class.\n"+e.getMessage());
-        }
-        return null;
-    }
-    
+ 
     
     
 }

@@ -1,9 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package programming2_assignment2.classes;
+package question2;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -61,4 +56,54 @@ public class CardGameUtils {
         
         return String.valueOf(charBuffer).trim();
     }
+    
+    //test helpers for Card, Deck, Hand main methods
+    public static void assertTrue(boolean val, String message){
+        if (val){
+            System.out.println(message + "PASS - <true> as expected");
+        }else{
+            System.out.println(message + "FAILED - expected <true> but got <false>.");
+        }
+    }
+    
+    public static void assertEquals(Object a, Object b, String message){
+        if ((a == b) || (a != null && a.equals(b)) || (a == null && b == null)){
+            System.out.println(message + "PASS - <"+a+"> equals <"+b+"> as expected");
+        }else{
+            System.out.println(message + "FAILED - expected <"+a+"> but got <"+b+">.");
+        }
+    }
+    
+    public static void assertFalse(boolean val, String message){
+        if (!val){
+            System.out.println(message + "PASS - <false> as expected");
+        }else{
+            System.out.println(message + "FAILED - expected <true> but got <false>.");
+        }
+    }
+    
+    public static void assertNotEquals(Object a, Object b, String message){
+        if ((a == b) || (a != null && a.equals(b)) || (a == null && b == null)){
+            System.out.println(message + "FAILED - expected <"+a+"> but got <"+b+">.");
+        }else{
+            System.out.println(message + "PASS - <"+a+"> doesn't equal <"+b+"> as expected");
+        }
+    }
+    
+    public static void assertTrue(boolean val){
+        assertTrue(val, "");
+    }
+    
+    public static void assertEquals(Object a, Object b){
+        assertEquals(a, b, "");
+    }
+    
+    public static void assertFalse(boolean val){
+        assertFalse(val, "");
+    }
+    
+    public static void assertNotEquals(Object a, Object b){
+        assertNotEquals(a, b, "");
+    }
+    
 }

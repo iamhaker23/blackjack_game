@@ -1,19 +1,21 @@
-package programming2_assignment2.interfaces;
+package interfaces;
 
 
 /*
-author: Tony Bagnall
-date: 10/11/14
+initial author: Tony Bagnall
+edited by: Hakeem Bux
+date: 30/01/18
 details: Interface for a Player for Question 2 of Programming 2 
 coursework
  */
 
+import question2.Hand;
+import question2.Card;
 import java.util.*;
-import programming2_assignment2.classes.*;
 
 /**
  *
- * @author ajb
+ * @author hdb
  */
 public interface Player{
     
