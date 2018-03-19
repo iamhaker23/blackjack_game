@@ -9,6 +9,7 @@ import static org.junit.Assert.*;
 import question1.Card;
 import question1.Card.Rank;
 import question1.Card.Suit;
+import question2.CardGameUtils;
 
 /**
  *
