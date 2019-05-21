@@ -1,7 +1,7 @@
 # Blackjack Game
 
-* A text-based game of blackjack.
-* Play against NPCs or watch the NPCs fight it out.
+* A text-based card game.
+* Save/Load, NPCs, tests and benchmarking.
 * University assignment for Programming II course.
 * This program is provided only as a demonstration of my software development experience.
 
@@ -16,7 +16,7 @@
 * Run > Run Project 
 * Possible inputs are printed to console when running.
 * When loading a game, provide the name of the save file to load (e.g. AUTOSAVE.ser)
-* Note: the quit option quits any game and creates an autosave, but it does not quit the Java program.
+* Note: the quit option quits any game mode and creates an autosave, but it does not quit the Java program.
 * Run > Test Project will run unit tests
 
 ## Demonstrates
