@@ -28,10 +28,10 @@
 
 ## Screenshots
 
-![alt text](https://github.com/iamhaker23/portfolio/tree/master/blackjack/1.PNG "First game")
-![alt text](https://github.com/iamhaker23/portfolio/tree/master/blackjack/2.PNG "Playing")
-![alt text](https://github.com/iamhaker23/portfolio/tree/master/blackjack/3.PNG "Saving")
-![alt text](https://github.com/iamhaker23/portfolio/tree/master/blackjack/4.PNG "Loaded")
+![alt text](https://github.com/iamhaker23/portfolio/tree/master/blackjack/1.png "First game")
+![alt text](https://github.com/iamhaker23/portfolio/tree/master/blackjack/2.png "Playing")
+![alt text](https://github.com/iamhaker23/portfolio/tree/master/blackjack/3.png "Saving")
+![alt text](https://github.com/iamhaker23/portfolio/tree/master/blackjack/4.png "Loaded")
 
 
 ## Credits
