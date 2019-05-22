@@ -40,3 +40,7 @@
 ## Acknowledgments
 
 * Based on initial classes provided by UEA CMP faculty.
+
+## Issues
+
+* 1 unit test failure caused by ordering of cards - plan is to sanity-check assertions.
